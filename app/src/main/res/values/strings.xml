@@ -84,6 +84,7 @@
     <string name="action_toggle_flashlight">Toggle Flashlight</string>
     <string name="action_toggle_colour_filter">Toggle Colour Filter</string>
     <string name="action_go_back">Go Back</string>
+    <string name="action_open_home">Luma Home</string>
 
     <!-- Gestures screen -->
 <string name="gesture_swipe_left">Swipe left</string>

@@ -490,7 +490,7 @@ class Prefs(
         set(value) = prefs.edit().putBoolean(LOCKSCREEN_CLOCK_NOTIFICATION_INDICATOR, value).apply()
 
     fun getLockscreenShortcutAction(): Constants.Action {
-        val action = loadAction(LOCKSCREEN_SHORTCUT_ACTION, Constants.Action.OpenApp)
+        val action = loadAction(LOCKSCREEN_SHORTCUT_ACTION, Constants.Action.OpenHome)
         return if (action == Constants.Action.LockScreen) {
             Constants.Action.OpenApp
         } else {

@@ -27,6 +27,7 @@ object Constants {
         ToggleFlashlight(R.string.action_toggle_flashlight),
         ToggleColourFilter(R.string.action_toggle_colour_filter),
         GoBack(R.string.action_go_back),
+        OpenHome(R.string.action_open_home),
         ;
 
         fun displayName(context: Context): String = context.getString(displayNameRes)

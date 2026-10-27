@@ -60,6 +60,12 @@ fun executeSecondaryAction(
             true
         }
 
+        Action.OpenHome -> {
+            // No-cloud fork: drop the lock screen overlay so Luma's home underneath shows.
+            ActionService.instance()?.dismissUnlockGateForStatusBarAction()
+            true
+        }
+
         Action.OpenApp,
         Action.Disabled,
         -> {
