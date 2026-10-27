@@ -40,6 +40,9 @@ class LumaNotificationListener : NotificationListenerService() {
         @Suppress("DEPRECATION")
         private fun StatusBarNotification.shouldFilter(svc: LumaNotificationListener): Boolean {
             if (notification.category == Notification.CATEGORY_TRANSPORT) return true
+            // Foreground-service status notifications (Molly's "WebSocket Service" and the like) are
+            // not messages. Android 14 does not flag them ongoing, so check the flag directly.
+            if (notification.flags and Notification.FLAG_FOREGROUND_SERVICE != 0) return true
             return isLightOsKeepAlive(svc)
         }
 
