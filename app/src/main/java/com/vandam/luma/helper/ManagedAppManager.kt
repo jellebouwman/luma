@@ -554,7 +554,7 @@ object ManagedAppManager {
         }
     }
 
-    private fun getInstalledAndroidApps(context: Context): List<AndroidLauncherApp> {
+    internal fun getInstalledAndroidApps(context: Context): List<AndroidLauncherApp> {
         val launcherApps = context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
         val appsByKey = linkedMapOf<String, AndroidLauncherApp>()
 

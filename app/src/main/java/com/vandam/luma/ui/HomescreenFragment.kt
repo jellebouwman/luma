@@ -42,6 +42,9 @@ class HomescreenFragment : Fragment() {
             SimpleTextButton(stringResource(R.string.settings_shortcuts)) {
                 findNavController().navigate(R.id.action_homescreenFragment_to_gesturesFragment)
             }
+            SimpleTextButton(stringResource(R.string.homescreen_tools)) {
+                findNavController().navigate(R.id.action_homescreenFragment_to_toolsFragment)
+            }
             SimpleTextButton(stringResource(R.string.homescreen_reorder_tools)) {
                 findNavController().navigate(R.id.action_homescreenFragment_to_reorderToolsFragment)
             }

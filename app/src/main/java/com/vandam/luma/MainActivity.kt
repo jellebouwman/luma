@@ -253,9 +253,8 @@ class MainActivity : AppCompatActivity() {
         val graph = navController.navInflater.inflate(R.navigation.nav_graph)
         graph.setStartDestination(
             when {
-                prefs.accountNumber.isNotBlank() && hasCompletedRequiredOnboardingPermissions() -> R.id.mainFragment
-                prefs.accountNumber.isNotBlank() -> R.id.onboardingPermissionsFragment
-                prefs.onboardingLoginStarted && hasCompletedRequiredOnboardingPermissions() -> R.id.loginFragment
+                // No-cloud fork: there is no account, permissions alone unlock the main screen.
+                hasCompletedRequiredOnboardingPermissions() -> R.id.mainFragment
                 prefs.onboardingStarted -> R.id.onboardingPermissionsFragment
                 else -> R.id.onboardingWelcomeFragment
             },

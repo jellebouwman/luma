@@ -141,7 +141,14 @@
         <action
             android:id="@+id/action_homescreenFragment_to_reorderToolsFragment"
             app:destination="@id/reorderToolsFragment" />
+        <action
+            android:id="@+id/action_homescreenFragment_to_toolsFragment"
+            app:destination="@id/toolsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/toolsFragment"
+        android:name="com.vandam.luma.ui.ToolsFragment"
+        android:label="ToolsFragment" />
     <fragment
         android:id="@+id/reorderToolsFragment"
         android:name="com.vandam.luma.ui.ReorderToolsFragment"

@@ -105,20 +105,16 @@ class OnboardingPermissionsFragment : Fragment() {
                     title = stringResource(R.string.onboarding_continue),
                     enabled = canContinue,
                 ) {
-                    if (isPermissionRecovery) {
-                        findNavController().navigate(
-                            R.id.mainFragment,
-                            null,
-                            NavOptions
-                                .Builder()
-                                .setLaunchSingleTop(true)
-                                .setPopUpTo(R.id.onboardingPermissionsFragment, true)
-                                .build(),
-                        )
-                    } else {
-                        Prefs.getInstance(requireContext()).onboardingLoginStarted = true
-                        findNavController().navigate(R.id.action_onboardingPermissionsFragment_to_loginFragment)
-                    }
+                    // No-cloud fork: no login step, go straight to the main screen.
+                    findNavController().navigate(
+                        R.id.mainFragment,
+                        null,
+                        NavOptions
+                            .Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(R.id.onboardingPermissionsFragment, true)
+                            .build(),
+                    )
                 }
             },
         ) {

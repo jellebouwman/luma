@@ -15,6 +15,8 @@
     <string name="settings_time">Time</string>
     <string name="settings_homescreen">Homescreen</string>
     <string name="homescreen_reorder_tools">Manage Tools</string>
+    <string name="homescreen_tools">Tools</string>
+    <string name="tools_title">Tools</string>
     <string name="homescreen_pages">Pages</string>
     <string name="homescreen_tools_source">Tools</string>
     <string name="homescreen_tools_source_dashboard">Synced from dashboard</string>
