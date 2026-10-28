@@ -491,14 +491,14 @@ class Prefs(
         get() = prefs.getBoolean(LOCKSCREEN_CLOCK_NOTIFICATION_INDICATOR, true)
         set(value) = prefs.edit().putBoolean(LOCKSCREEN_CLOCK_NOTIFICATION_INDICATOR, value).apply()
 
-    // No-cloud fork: pocket-proofing. The ring needs a long press and media
-    // controls stay off the lock mask unless the user turns them on.
+    // No-cloud fork: pocket-proofing. The ring needs a long press; media
+    // controls on the lock mask can be switched off if pocket taps skip tracks.
     var lockscreenShortcutLongPress: Boolean
         get() = prefs.getBoolean(LOCKSCREEN_SHORTCUT_LONG_PRESS, true)
         set(value) = prefs.edit().putBoolean(LOCKSCREEN_SHORTCUT_LONG_PRESS, value).apply()
 
     var lockscreenMediaControls: Boolean
-        get() = prefs.getBoolean(LOCKSCREEN_MEDIA_CONTROLS, false)
+        get() = prefs.getBoolean(LOCKSCREEN_MEDIA_CONTROLS, true)
         set(value) = prefs.edit().putBoolean(LOCKSCREEN_MEDIA_CONTROLS, value).apply()
 
     fun getLockscreenShortcutAction(): Constants.Action {

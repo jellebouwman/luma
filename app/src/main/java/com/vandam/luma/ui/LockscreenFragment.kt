@@ -25,7 +25,7 @@ class LockscreenFragment : Fragment() {
     private val notificationIndicatorState = mutableStateOf(true)
     private val dateFormatState = mutableStateOf(Prefs.LockscreenDateFormat.None)
     private val shortcutLongPressState = mutableStateOf(true)
-    private val mediaControlsState = mutableStateOf(false)
+    private val mediaControlsState = mutableStateOf(true)
 
     override fun onResume() {
         super.onResume()
