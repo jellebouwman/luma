@@ -16,6 +16,7 @@ import com.vandam.luma.ui.compose.NotificationIndicatorSelector
 import com.vandam.luma.ui.compose.SelectorButton
 import com.vandam.luma.ui.compose.SettingsScreen
 import com.vandam.luma.ui.compose.SimpleTextButton
+import com.vandam.luma.ui.compose.ToggleTextButton
 
 class LockscreenFragment : Fragment() {
     private val prefs by lazy { Prefs.getInstance(requireContext()) }
@@ -23,6 +24,8 @@ class LockscreenFragment : Fragment() {
     private val hasNotificationPermission = mutableStateOf(false)
     private val notificationIndicatorState = mutableStateOf(true)
     private val dateFormatState = mutableStateOf(Prefs.LockscreenDateFormat.None)
+    private val shortcutLongPressState = mutableStateOf(true)
+    private val mediaControlsState = mutableStateOf(false)
 
     override fun onResume() {
         super.onResume()
@@ -30,6 +33,8 @@ class LockscreenFragment : Fragment() {
         timeFormatState.value = prefs.timeFormat
         notificationIndicatorState.value = prefs.lockscreenClockNotificationIndicator
         dateFormatState.value = prefs.lockscreenDateFormat
+        shortcutLongPressState.value = prefs.lockscreenShortcutLongPress
+        mediaControlsState.value = prefs.lockscreenMediaControls
     }
 
     override fun onCreateView(
@@ -47,6 +52,22 @@ class LockscreenFragment : Fragment() {
             SimpleTextButton(stringResource(R.string.settings_shortcuts)) {
                 findNavController().navigate(R.id.action_lockscreenFragment_to_lockscreenTapShortcutsFragment)
             }
+            ToggleTextButton(
+                title = stringResource(R.string.lockscreen_shortcut_long_press),
+                checked = shortcutLongPressState.value,
+                onValueChange = {
+                    shortcutLongPressState.value = it
+                    prefs.lockscreenShortcutLongPress = it
+                },
+            )
+            ToggleTextButton(
+                title = stringResource(R.string.lockscreen_media_controls),
+                checked = mediaControlsState.value,
+                onValueChange = {
+                    mediaControlsState.value = it
+                    prefs.lockscreenMediaControls = it
+                },
+            )
             NotificationIndicatorSelector(
                 label = stringResource(R.string.notifications_indicator),
                 hasPermission = hasNotificationPermission.value,

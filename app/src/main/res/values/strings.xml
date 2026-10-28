@@ -55,6 +55,8 @@
     <string name="lockscreen_shortcut">Shortcut</string>
     <string name="lockscreen_shortcut_icon">Shortcut Icon</string>
     <string name="lockscreen_tap_shortcuts">Tap Shortcuts</string>
+    <string name="lockscreen_shortcut_long_press">Shortcut Needs Long Press</string>
+    <string name="lockscreen_media_controls">Media Controls</string>
 
     <!-- Tools screen -->
     <string name="tools_phone">Phone</string>

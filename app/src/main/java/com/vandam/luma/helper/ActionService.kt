@@ -2064,17 +2064,8 @@ class ActionService : AccessibilityService() {
             isClickable = enabled
             isFocusable = enabled
             setOnClickListener(
-                if (enabled) {
-                    View.OnClickListener {
-                        if (dispatchLockscreenShortcut()) {
-                            dispatchUnlockGateEventOnMain(
-                                UnlockGateEvent.DismissRequested(
-                                    nowUptimeMs = SystemClock.uptimeMillis(),
-                                    minDelayMs = UNLOCK_GATE_SHORTCUT_HIDE_DELAY_MS,
-                                ),
-                            )
-                        }
-                    }
+                if (enabled && !prefs.lockscreenShortcutLongPress) {
+                    View.OnClickListener { activateLockscreenShortcut() }
                 } else {
                     null
                 },
@@ -2082,6 +2073,17 @@ class ActionService : AccessibilityService() {
         }
         setupMediaButtonHandlers(view)
         bindUnlockGateGestureListeners(view)
+    }
+
+    private fun activateLockscreenShortcut() {
+        if (dispatchLockscreenShortcut()) {
+            dispatchUnlockGateEventOnMain(
+                UnlockGateEvent.DismissRequested(
+                    nowUptimeMs = SystemClock.uptimeMillis(),
+                    minDelayMs = UNLOCK_GATE_SHORTCUT_HIDE_DELAY_MS,
+                ),
+            )
+        }
     }
 
     private fun updateUnlockGateWakeCoverMode(view: View) {
@@ -2204,7 +2206,7 @@ class ActionService : AccessibilityService() {
                 View.GONE
             }
         view.findViewById<View>(R.id.unlockGateHomeButton).visibility = View.VISIBLE
-        if (MediaSessionHelper.mediaInfo.value != null) {
+        if (prefs.lockscreenMediaControls && MediaSessionHelper.mediaInfo.value != null) {
             view.findViewById<View>(R.id.unlockGateMediaControls).visibility = View.VISIBLE
         }
     }
@@ -2634,8 +2636,15 @@ class ActionService : AccessibilityService() {
             view.findViewById(R.id.unlockGateHomeButton),
             preserveSingleTap = true,
             onPress = {
-                if (prefs.getLockscreenShortcutAction() != Action.Disabled) {
+                if (prefs.getLockscreenShortcutAction() != Action.Disabled && !prefs.lockscreenShortcutLongPress) {
                     performAppTapHapticFeedback(this)
+                }
+            },
+            onLongPress = {
+                // No-cloud fork: a long press on the ring is far harder to trigger in a pocket than a tap.
+                if (prefs.getLockscreenShortcutAction() != Action.Disabled && prefs.lockscreenShortcutLongPress) {
+                    performAppTapHapticFeedback(this)
+                    activateLockscreenShortcut()
                 }
             },
         )
@@ -2662,14 +2671,16 @@ class ActionService : AccessibilityService() {
         target: View,
         preserveSingleTap: Boolean = false,
         onPress: (() -> Unit)? = null,
+        onLongPress: (() -> Unit)? = null,
     ) {
-        target.setOnTouchListener(createUnlockGateGestureTouchListener(target, preserveSingleTap, onPress))
+        target.setOnTouchListener(createUnlockGateGestureTouchListener(target, preserveSingleTap, onPress, onLongPress))
     }
 
     private fun createUnlockGateGestureTouchListener(
         target: View? = null,
         preserveSingleTap: Boolean = false,
         onPress: (() -> Unit)? = null,
+        onLongPress: (() -> Unit)? = null,
     ): View.OnTouchListener =
         object : SwipeTouchListener(
             context = this,
@@ -2696,6 +2707,10 @@ class ActionService : AccessibilityService() {
             override fun onSwipeDown() = handleUnlockGateGesture(GestureType.SWIPE_DOWN)
 
             override fun onDoubleClick() = handleUnlockGateGesture(GestureType.DOUBLE_TAP)
+
+            override fun onLongClick(view: View) {
+                onLongPress?.invoke()
+            }
 
             override fun onClick(view: View) {
                 if (preserveSingleTap) {
@@ -2786,7 +2801,8 @@ class ActionService : AccessibilityService() {
             mediaControlsView.visibility = View.GONE
             return
         }
-        val mediaInfo = MediaSessionHelper.mediaInfo.value
+        // No-cloud fork: media controls on the lock mask are opt-in (pocket taps skipped tracks).
+        val mediaInfo = MediaSessionHelper.mediaInfo.value?.takeIf { prefs.lockscreenMediaControls }
         if (mediaInfo != null) {
             val playPauseView = view.findViewById<ImageView>(R.id.unlockGateMediaPlayPause)
             playPauseView.setImageResource(

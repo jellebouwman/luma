@@ -100,6 +100,8 @@ private const val LOCKSCREEN_CLOCK_NOTIFICATION_INDICATOR = "lockscreen_clock_no
 private const val LOCKSCREEN_SHORTCUT_ACTION = "lockscreen_shortcut_action"
 private const val LOCKSCREEN_SHORTCUT_APP = "lockscreen_shortcut_app"
 private const val LOCKSCREEN_SHORTCUT_ICON = "lockscreen_shortcut_icon"
+private const val LOCKSCREEN_SHORTCUT_LONG_PRESS = "lockscreen_shortcut_long_press"
+private const val LOCKSCREEN_MEDIA_CONTROLS = "lockscreen_media_controls"
 
 class Prefs(
     val context: Context,
@@ -488,6 +490,16 @@ class Prefs(
     var lockscreenClockNotificationIndicator: Boolean
         get() = prefs.getBoolean(LOCKSCREEN_CLOCK_NOTIFICATION_INDICATOR, true)
         set(value) = prefs.edit().putBoolean(LOCKSCREEN_CLOCK_NOTIFICATION_INDICATOR, value).apply()
+
+    // No-cloud fork: pocket-proofing. The ring needs a long press and media
+    // controls stay off the lock mask unless the user turns them on.
+    var lockscreenShortcutLongPress: Boolean
+        get() = prefs.getBoolean(LOCKSCREEN_SHORTCUT_LONG_PRESS, true)
+        set(value) = prefs.edit().putBoolean(LOCKSCREEN_SHORTCUT_LONG_PRESS, value).apply()
+
+    var lockscreenMediaControls: Boolean
+        get() = prefs.getBoolean(LOCKSCREEN_MEDIA_CONTROLS, false)
+        set(value) = prefs.edit().putBoolean(LOCKSCREEN_MEDIA_CONTROLS, value).apply()
 
     fun getLockscreenShortcutAction(): Constants.Action {
         val action = loadAction(LOCKSCREEN_SHORTCUT_ACTION, Constants.Action.OpenHome)
