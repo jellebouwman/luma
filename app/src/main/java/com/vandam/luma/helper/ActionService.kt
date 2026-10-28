@@ -547,8 +547,12 @@ class ActionService : AccessibilityService() {
             if (unlockGatePhase == UnlockGatePhase.SecureMask) {
                 if (event.action == KeyEvent.ACTION_UP) {
                     consumedMappedKeyUps.add(KeyEvent.KEYCODE_HOME)
-                    runOnMainThread {
-                        dismissSecureLockMaskWithGestureOnMain()
+                    // No-cloud fork: a short Home press must not pull up the stock PIN pad;
+                    // the long press path above still does.
+                    if (!prefs.lockscreenShortcutLongPress) {
+                        runOnMainThread {
+                            dismissSecureLockMaskWithGestureOnMain()
+                        }
                     }
                 }
                 return true
@@ -2107,12 +2111,26 @@ class ActionService : AccessibilityService() {
         }
         view.isClickable = !blank
         view.isFocusable = !blank
+        // No-cloud fork: with the long press setting on, a plain tap on the secure mask
+        // does nothing (pocket and fumble safe); a long press brings up the stock PIN pad.
+        val longPressOnly = prefs.lockscreenShortcutLongPress
         view.setOnClickListener(
-            if (blank) {
+            if (blank || longPressOnly) {
                 null
             } else {
                 View.OnClickListener {
                     dismissSecureLockMaskWithGestureOnMain()
+                }
+            },
+        )
+        view.isLongClickable = !blank && longPressOnly
+        view.setOnLongClickListener(
+            if (blank || !longPressOnly) {
+                null
+            } else {
+                View.OnLongClickListener {
+                    dismissSecureLockMaskWithGestureOnMain()
+                    true
                 }
             },
         )
